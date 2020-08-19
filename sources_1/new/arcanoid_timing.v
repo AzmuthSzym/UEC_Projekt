@@ -29,7 +29,8 @@ module arcanoid_timing (
   output wire hsync,
   output wire hblnk,
   
-  input wire pclk
+  input wire pclk,
+  input wire reset
   );
 
   
@@ -50,16 +51,29 @@ assign hcount = hcount_nxt;
   
 always@(posedge pclk)
 begin
-    
-   vcount_nxt <= #1 vcount_in;
-   hcount_nxt <= #1 hcount_in;
+   if(reset)
+   begin
+    vcount_nxt <= #1 0;
+    hcount_nxt <= #1 0;
+  
+    vblnk_nxt <= #1 0;
+    hblnk_nxt <= #1 0;
+  
+    vsync_nxt <= #1 0;
+    hsync_nxt <= #1 0;   
+   end
+   else
+   begin
    
-   vblnk_nxt <= #1 vblnk_in;
-   hblnk_nxt <= #1 hblnk_in;
+    vcount_nxt <= #1 vcount_in;
+    hcount_nxt <= #1 hcount_in;
    
-   vsync_nxt <= #1 vsync_in;
-   hsync_nxt <= #1 hsync_in;
-
+    vblnk_nxt <= #1 vblnk_in;
+    hblnk_nxt <= #1 hblnk_in;
+   
+    vsync_nxt <= #1 vsync_in;
+    hsync_nxt <= #1 hsync_in;
+   end
 
 end  
   

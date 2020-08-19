@@ -76,10 +76,31 @@ module draw_board
     
     always @*
         begin
-           if ((vcount_in >= 200 && vcount_in <= 220) && (hcount_in >= 140 && hcount_in <= 220)) rgb_nxt <= 12'h2_2_f; 
-           else if ((vcount_in >= 200 && vcount_in <= 220) && (hcount_in >= 240 && hcount_in <= 320)) rgb_nxt <= 12'h2_2_f;
-           else if ((vcount_in >= 200 && vcount_in <= 220) && (hcount_in >= 340 && hcount_in <= 420)) rgb_nxt <= 12'h2_2_f; 
-           else rgb_nxt = 12'h8_8_8;           
+           //FIRST ROW
+           if ((vcount_in >= 100 && vcount_in <= 120) && (hcount_in >= 282 && hcount_in <= 362)) rgb_nxt <= 12'h2_2_f;
+           else if ((vcount_in >= 100 && vcount_in <= 120) && (hcount_in >= 382 && hcount_in <= 462)) rgb_nxt <= 12'h2_2_f;
+           else if ((vcount_in >= 100 && vcount_in <= 120) && (hcount_in >= 482 && hcount_in <= 562)) rgb_nxt <= 12'h2_2_f;
+           else if ((vcount_in >= 100 && vcount_in <= 120) && (hcount_in >= 582 && hcount_in <= 662)) rgb_nxt <= 12'h2_2_f;
+           
+           //SECOND ROW
+           if ((vcount_in >= 140 && vcount_in <= 160) && (hcount_in >= 282 && hcount_in <= 362)) rgb_nxt <= 12'h2_2_f;
+           else if ((vcount_in >= 140 && vcount_in <= 160) && (hcount_in >= 382 && hcount_in <= 462)) rgb_nxt <= 12'h2_2_f;
+           else if ((vcount_in >= 140 && vcount_in <= 160) && (hcount_in >= 482 && hcount_in <= 562)) rgb_nxt <= 12'h2_2_f;
+           else if ((vcount_in >= 140 && vcount_in <= 160) && (hcount_in >= 582 && hcount_in <= 662)) rgb_nxt <= 12'h2_2_f;
+           
+           //THIRD ROW
+           if ((vcount_in >= 180 && vcount_in <= 200) && (hcount_in >= 282 && hcount_in <= 362)) rgb_nxt <= 12'h2_2_f;
+           else if ((vcount_in >= 180 && vcount_in <= 200) && (hcount_in >= 382 && hcount_in <= 462)) rgb_nxt <= 12'h2_2_f;
+           else if ((vcount_in >= 180 && vcount_in <= 200) && (hcount_in >= 482 && hcount_in <= 562)) rgb_nxt <= 12'h2_2_f;
+           else if ((vcount_in >= 180 && vcount_in <= 200) && (hcount_in >= 582 && hcount_in <= 662)) rgb_nxt <= 12'h2_2_f;
+           
+           //FOURTH ROW
+           if ((vcount_in >= 220 && vcount_in <= 240) && (hcount_in >= 282 && hcount_in <= 362)) rgb_nxt <= 12'h2_2_f;
+           else if ((vcount_in >= 220 && vcount_in <= 240) && (hcount_in >= 382 && hcount_in <= 462)) rgb_nxt <= 12'h2_2_f;
+           else if ((vcount_in >= 220 && vcount_in <= 240) && (hcount_in >= 482 && hcount_in <= 562)) rgb_nxt <= 12'h2_2_f;
+           else if ((vcount_in >= 220 && vcount_in <= 240) && (hcount_in >= 582 && hcount_in <= 662)) rgb_nxt <= 12'h2_2_f;
+                                          
+           else rgb_nxt = 12'h8_8_8;
         end
     
 endmodule

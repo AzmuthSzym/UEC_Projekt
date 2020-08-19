@@ -28,18 +28,20 @@ module arcanoid_top (
   output reg [3:0] r,
   output reg [3:0] g,
   output reg [3:0] b,
-  output wire pclk_mirror
+  output wire pclk_mirror,
+  inout ps2_clk,
+  inout ps2_data
   );
 
-  wire pclk;
+  wire pclk, locked, mclk;
   
-    /*clk_wiz_0 my_clk (
+  clk_wiz_0 my_clk (
     .clk(clk),
     .reset(reset),
     .locked(locked),
-    .clk40MHz(pclk),
+    .clk65MHz(pclk),
     .clk100MHz(mclk)
-  );*/
+  );
   
   ODDR pclk_oddr (
     .Q(pclk_mirror),
@@ -51,18 +53,26 @@ module arcanoid_top (
     .S(1'b0)
   );
 
-  clk_wiz_0 my_clk( .clk_in1(clk), .clk_out1(pclk));
-  
-  //[25] vblnk, [24] hblnk, [23] vsync, [22] hsync, [21:11] vcount, [10:0] hcount
-  wire [25:0] arcanoid_bus [2:0];
   wire [10:0] vcount, hcount;
   wire vsync, hsync;
   wire vblnk, hblnk;
+  wire mouse_left; 
+  wire [11:0] rgb_wire, rgb_out;
+  wire [11:0] xpos, ypos;
+
+  MouseCtl my_mouse (
+     .clk(mclk),
+     .rst(reset),
+     .ps2_clk(ps2_clk),
+     .ps2_data(ps2_data),
+     .ypos(ypos),
+     .xpos(xpos),
+     .left(mouse_left)
+  );
 
   wire [10:0] vcount_timing, hcount_timing;
   wire vsync_timing, hsync_timing;
-  wire vblnk_timing, hblnk_timing;  
-  wire [11:0] rgb_wire, rgb_out;
+  wire vblnk_timing, hblnk_timing; 
   
   arcanoid_timing my_timing (
     .vcount(vcount_timing),
@@ -71,8 +81,15 @@ module arcanoid_top (
     .hcount(hcount_timing),
     .hsync(hsync_timing),
     .hblnk(hblnk_timing),
-    .pclk(pclk)
+    .pclk(pclk),
+    .reset(reset)
   );
+
+  wire [10:0] vcount_board, hcount_board;
+  wire vsync_board, hsync_board;
+  wire vblnk_board, hblnk_board;  
+  wire [11:0] rgb_board;
+  wire [11:0] xpos_ctl, ypos_ctl;
   
   draw_board my_board (
     .hcount_in(hcount_timing),
@@ -82,6 +99,35 @@ module arcanoid_top (
     .vsync_in(vsync_timing),
     .vblnk_in(vblnk_timing),
     .pclk(pclk),
+    .rgb_out(rgb_board),
+    .hcount_out(hcount_board),
+    .vcount_out(vcount_board),
+    .hblnk_out(hblnk_board),
+    .hsync_out(hsync_board),
+    .vblnk_out(vblnk_board),
+    .vsync_out(vsync_board),
+    .reset(reset)
+  );
+     
+   player_ctl my_player_ctl(
+   .mouse_left(mouse_left),
+   .mouse_xpos(xpos),
+   .mouse_ypos(ypos),
+   .xpos(xpos_ctl),
+   .ypos(ypos_ctl),
+   .pclk(pclk),
+   .reset(reset)
+  );
+       
+  draw_player my_player (
+    .hcount_in(hcount_board),
+    .hsync_in(hsync_board),
+    .hblnk_in(hblnk_board),
+    .vcount_in(vcount_board),
+    .vsync_in(vsync_board),
+    .vblnk_in(vblnk_board),
+    .rgb_in(rgb_board),
+    .pclk(pclk),
     .rgb_out(rgb_out),
     .hcount_out(hcount),
     .vcount_out(vcount),
@@ -89,19 +135,38 @@ module arcanoid_top (
     .hsync_out(hsync),
     .vblnk_out(vblnk),
     .vsync_out(vsync),
-    .reset(reset)
+    .reset(reset),
+    .x_pos(xpos_ctl),
+    .y_pos(ypos_ctl)    
   );
 
   wire [3:0] red =  rgb_out[11:8];
   wire [3:0] green = rgb_out[7:4];
-  wire [3:0] blue = rgb_out[3:0]; 
+  wire [3:0] blue = rgb_out[3:0];
+
+  wire [3:0] r_out, g_out, b_out;
+  
+  MouseDisplay my_display (
+    .pixel_clk(mclk),
+    .xpos(xpos),
+    .ypos(ypos),
+    .hcount(hcount),
+    .vcount(vcount),
+    .blank(hblnk|vblnk),
+    .red_in(red),
+    .green_in(green),
+    .blue_in(blue),
+    .red_out(r_out),
+    .green_out(g_out),
+    .blue_out(b_out)
+  );  
   
   always @(posedge pclk)
   begin
     // Just pass these through.
     hs <= hsync;
     vs <= vsync;
-    {r,g,b} <= {red,green,blue};
+    {r,g,b} <= {r_out,g_out,b_out};
   end
   
 endmodule
