@@ -118,7 +118,12 @@ module arcanoid_top (
    .pclk(pclk),
    .reset(reset)
   );
-       
+   
+  wire [10:0] vcount_player, hcount_player;
+  wire vsync_player, hsync_player;
+  wire vblnk_player, hblnk_player;  
+  wire [11:0] rgb_player;
+         
   draw_player my_player (
     .hcount_in(hcount_board),
     .hsync_in(hsync_board),
@@ -128,6 +133,27 @@ module arcanoid_top (
     .vblnk_in(vblnk_board),
     .rgb_in(rgb_board),
     .pclk(pclk),
+    .rgb_out(rgb_player),
+    .hcount_out(hcount_player),
+    .vcount_out(vcount_player),
+    .hblnk_out(hblnk_player),
+    .hsync_out(hsync_player),
+    .vblnk_out(vblnk_player),
+    .vsync_out(vsync_player),
+    .reset(reset),
+    .x_pos(xpos_ctl),
+    .y_pos(ypos_ctl)    
+  );
+
+  draw_ball my_ball (
+    .hcount_in(hcount_player),
+    .hsync_in(hsync_player),
+    .hblnk_in(hblnk_player),
+    .vcount_in(vcount_player),
+    .vsync_in(vsync_player),
+    .vblnk_in(vblnk_player),
+    .rgb_in(rgb_player),
+    .pclk(pclk),
     .rgb_out(rgb_out),
     .hcount_out(hcount),
     .vcount_out(vcount),
@@ -135,11 +161,8 @@ module arcanoid_top (
     .hsync_out(hsync),
     .vblnk_out(vblnk),
     .vsync_out(vsync),
-    .reset(reset),
-    .x_pos(xpos_ctl),
-    .y_pos(ypos_ctl)    
+    .reset(reset)
   );
-
   wire [3:0] red =  rgb_out[11:8];
   wire [3:0] green = rgb_out[7:4];
   wire [3:0] blue = rgb_out[3:0];

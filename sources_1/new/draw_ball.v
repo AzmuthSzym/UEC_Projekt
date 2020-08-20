@@ -4,7 +4,7 @@
 // Company: AGH
 // Engineer: Szymon Dziadon / Pawel Majtas
 // 
-// Create Date: 19.08.2020 14:18:56
+// Create Date: 20.08.2020 23:08:37
 // Design Name: 
 // Module Name: arcanoid_timing
 // Project Name: Arkanoid
@@ -20,9 +20,7 @@
 // 
 //////////////////////////////////////////////////////////////////////////////////
 
-
-module draw_player(
-        input wire reset,
+module draw_ball(
         input wire pclk,
         input wire [10:0] hcount_in,
         input wire hsync_in,
@@ -31,9 +29,8 @@ module draw_player(
         input wire vsync_in,
         input wire vblnk_in,
         input wire [11:0] rgb_in,
-        input wire [11:0] x_pos,
-        input wire [11:0] y_pos,
-    
+        input wire reset,
+
         output reg [10:0] vcount_out,
         output reg vsync_out,
         output reg vblnk_out,
@@ -43,9 +40,9 @@ module draw_player(
         output reg [11:0] rgb_out
     );
     
-    localparam HEIGHT = 20, WIDTH = 200;
     reg [11:0] rgb_nxt = 0;
-    
+    reg [11:0] y_pos = 30;
+    reg [11:0] x_pos = 30;
     always@(posedge pclk)
     if(reset)
     begin
@@ -73,10 +70,10 @@ module draw_player(
      
         rgb_out <= #1 rgb_nxt;
     end
-        
+    
     always @*
         begin
-            if ((vcount_in >= y_pos && vcount_in <= (y_pos+HEIGHT)) && (hcount_in >= x_pos && hcount_in <= (x_pos+WIDTH))) rgb_nxt = 12'hf_0_0; 
+            if (((vcount_in-x_pos)*(vcount_in-x_pos))+((hcount_in-y_pos)*(hcount_in-y_pos)) <= 100) rgb_nxt = 12'h0_f_0; 
             else rgb_nxt = rgb_in;           
         end
             
