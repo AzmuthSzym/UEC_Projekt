@@ -41,8 +41,11 @@ module draw_ball(
     );
     
     reg [11:0] rgb_nxt = 0;
-    reg [11:0] y_pos = 30;
-    reg [11:0] x_pos = 30;
+    reg [11:0] y_pos = 30, y_pos_nxt;
+    reg [11:0] x_pos = 30, x_pos_nxt;
+    reg x_inc=1,y_inc=0;
+    reg [31:0] ball_time_x= 800_000, ball_time_x_nxt=800_000, ball_time_y = 1_000_000, ball_time_y_nxt=1_000_000;
+    
     always@(posedge pclk)
     if(reset)
     begin
@@ -69,12 +72,44 @@ module draw_ball(
         hcount_out <= #1 hcount_in;
      
         rgb_out <= #1 rgb_nxt;
+        
+        x_pos <= #1 x_pos_nxt;
+        y_pos <= #1 y_pos_nxt;
+        ball_time_x <= #1 ball_time_x_nxt;
+        ball_time_y <= #1 ball_time_y_nxt;
     end
     
     always @*
         begin
-            if (((vcount_in-x_pos)*(vcount_in-x_pos))+((hcount_in-y_pos)*(hcount_in-y_pos)) <= 100) rgb_nxt = 12'h0_f_0; 
-            else rgb_nxt = rgb_in;           
-        end
+            if (((hcount_in-x_pos)*(hcount_in-x_pos))+((vcount_in-y_pos)*(vcount_in-y_pos)) <= 100) rgb_nxt = 12'h0_f_0; 
+            else rgb_nxt = rgb_in;    
             
+            if(x_pos ==1023) x_inc =0;  
+            if(x_pos == 0) x_inc=1;
+            
+            y_pos_nxt = y_pos;
+            
+            if(ball_time_x ==0) begin
+                if(x_inc) x_pos_nxt = x_pos+1;
+                else x_pos_nxt = x_pos -1; 
+                ball_time_x_nxt = 800_000;
+            end
+            else begin
+                x_pos_nxt = x_pos;
+                ball_time_x_nxt = ball_time_x -1;
+            end
+            /*
+            if(y_pos ==767) y_inc =0;  
+            if(y_pos == 0) y_inc=1;
+                        
+            if(ball_time_y ==0) begin
+                if(y_inc) y_pos_nxt = y_pos+1;
+                else y_pos_nxt = y_pos -1; 
+                ball_time_y_nxt = 1_000_000;
+            end
+            else begin
+                y_pos_nxt = y_pos;
+                ball_time_y_nxt = ball_time_y -1;
+            end*/
+       end
 endmodule
