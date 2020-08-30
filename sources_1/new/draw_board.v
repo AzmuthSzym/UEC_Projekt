@@ -44,6 +44,7 @@ module draw_board
     localparam HEIGHT = 50, WIDTH = 100;
     localparam COLOR = 12'he_f_d;
     reg [11:0] rgb_nxt = 0;
+    reg tiles [3:0] [3:0];
     
     always@(posedge pclk)
     if(reset)
@@ -72,12 +73,12 @@ module draw_board
      
         rgb_out <= #1 rgb_nxt;
     end
- 
+    
     
     always @*
         begin
            //FIRST ROW
-           if ((vcount_in >= 100 && vcount_in <= 120) && (hcount_in >= 282 && hcount_in <= 362)) rgb_nxt <= 12'h2_2_f;
+           if ((vcount_in >= 100 && vcount_in <= 120) && (hcount_in >= 282 && hcount_in <= 362) && !(tiles[0][0])) rgb_nxt <= 12'h2_2_f;
            else if ((vcount_in >= 100 && vcount_in <= 120) && (hcount_in >= 382 && hcount_in <= 462)) rgb_nxt <= 12'h2_2_f;
            else if ((vcount_in >= 100 && vcount_in <= 120) && (hcount_in >= 482 && hcount_in <= 562)) rgb_nxt <= 12'h2_2_f;
            else if ((vcount_in >= 100 && vcount_in <= 120) && (hcount_in >= 582 && hcount_in <= 662)) rgb_nxt <= 12'h2_2_f;

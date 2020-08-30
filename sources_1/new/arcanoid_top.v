@@ -144,6 +144,19 @@ module arcanoid_top (
     .x_pos(xpos_ctl),
     .y_pos(ypos_ctl)    
   );
+    wire [11:0] x_pos,y_pos;
+    
+  draw_ball_x my_x(
+  .pclk(pclk),
+  .x_pos(x_pos)
+  );  
+    
+
+
+  draw_ball_y my_y (
+    .pclk(pclk),
+    .y_pos(y_pos)
+);
 
   draw_ball my_ball (
     .hcount_in(hcount_player),
@@ -154,6 +167,9 @@ module arcanoid_top (
     .vblnk_in(vblnk_player),
     .rgb_in(rgb_player),
     .pclk(pclk),
+    .x_pos(x_pos),
+    .y_pos(y_pos),
+    
     .rgb_out(rgb_out),
     .hcount_out(hcount),
     .vcount_out(vcount),
@@ -163,6 +179,7 @@ module arcanoid_top (
     .vsync_out(vsync),
     .reset(reset)
   );
+  
   wire [3:0] red =  rgb_out[11:8];
   wire [3:0] green = rgb_out[7:4];
   wire [3:0] blue = rgb_out[3:0];
