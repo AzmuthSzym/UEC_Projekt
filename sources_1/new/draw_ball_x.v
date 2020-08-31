@@ -33,9 +33,14 @@ reg [11:0] x_pos_nxt=30;
 reg x_inc = 1;
 
     always@(posedge pclk) begin
-    
-        x_pos <= #1 x_pos_nxt;
         ball_time_x <= #1 ball_time_x_nxt;
+        x_pos <= #1 x_pos_nxt;
+    end
+
+    always@* begin
+    
+        
+        
     
     end
 
