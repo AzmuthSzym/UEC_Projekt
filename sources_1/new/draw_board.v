@@ -22,7 +22,9 @@
 
 
 module draw_board
+    
     (
+        
         input wire pclk,
         input wire [10:0] hcount_in,
         input wire hsync_in,
@@ -40,7 +42,7 @@ module draw_board
         output reg hblnk_out,
         output reg [11:0] rgb_out
     );
-    
+    `include "blocks_coordinates.v"
     localparam HEIGHT = 50, WIDTH = 100;
     localparam COLOR = 12'he_f_d;
     reg [11:0] rgb_nxt = 0;
@@ -78,28 +80,28 @@ module draw_board
     always @*
         begin
            //FIRST ROW
-           if ((vcount_in >= 100 && vcount_in <= 120) && (hcount_in >= 282 && hcount_in <= 362) && !(tiles[0][0])) rgb_nxt <= 12'h2_2_f;
-           else if ((vcount_in >= 100 && vcount_in <= 120) && (hcount_in >= 382 && hcount_in <= 462)) rgb_nxt <= 12'h2_2_f;
-           else if ((vcount_in >= 100 && vcount_in <= 120) && (hcount_in >= 482 && hcount_in <= 562)) rgb_nxt <= 12'h2_2_f;
-           else if ((vcount_in >= 100 && vcount_in <= 120) && (hcount_in >= 582 && hcount_in <= 662)) rgb_nxt <= 12'h2_2_f;
+           if ((vcount_in >= VER1 && vcount_in <= (VER1+B_HEIGHT)) && (hcount_in >= HOR1 && hcount_in <= (HOR1+B_WIDTH)) && !(tiles[0][0])) rgb_nxt <= 12'h2_2_f;
+           else if ((vcount_in >= VER1 && vcount_in <= (VER1+B_HEIGHT)) && (hcount_in >= HOR2 && hcount_in <= (HOR2+B_WIDTH))) rgb_nxt <= 12'h2_2_f;
+           else if ((vcount_in >= VER1 && vcount_in <= (VER1+B_HEIGHT)) && (hcount_in >= HOR3 && hcount_in <= (HOR3+B_WIDTH))) rgb_nxt <= 12'h2_2_f;
+           else if ((vcount_in >= VER1 && vcount_in <= (VER1+B_HEIGHT)) && (hcount_in >= HOR4 && hcount_in <= (HOR4+B_WIDTH))) rgb_nxt <= 12'h2_2_f;
            
            //SECOND ROW
-           if ((vcount_in >= 140 && vcount_in <= 160) && (hcount_in >= 282 && hcount_in <= 362)) rgb_nxt <= 12'h2_2_f;
-           else if ((vcount_in >= 140 && vcount_in <= 160) && (hcount_in >= 382 && hcount_in <= 462)) rgb_nxt <= 12'h2_2_f;
-           else if ((vcount_in >= 140 && vcount_in <= 160) && (hcount_in >= 482 && hcount_in <= 562)) rgb_nxt <= 12'h2_2_f;
-           else if ((vcount_in >= 140 && vcount_in <= 160) && (hcount_in >= 582 && hcount_in <= 662)) rgb_nxt <= 12'h2_2_f;
+           if ((vcount_in >= VER2 && vcount_in <= (VER2+B_HEIGHT)) && (hcount_in >= HOR1 && hcount_in <= (HOR1+B_WIDTH))) rgb_nxt <= 12'h2_2_f;
+           else if ((vcount_in >= VER2 && vcount_in <= (VER2+B_HEIGHT)) && (hcount_in >= HOR2 && hcount_in <= (HOR2+B_WIDTH))) rgb_nxt <= 12'h2_2_f;
+           else if ((vcount_in >= VER2 && vcount_in <= (VER2+B_HEIGHT)) && (hcount_in >= HOR3 && hcount_in <= (HOR3+B_WIDTH))) rgb_nxt <= 12'h2_2_f;
+           else if ((vcount_in >= VER2 && vcount_in <= (VER2+B_HEIGHT)) && (hcount_in >= HOR4 && hcount_in <= (HOR4+B_WIDTH))) rgb_nxt <= 12'h2_2_f;
            
            //THIRD ROW
-           if ((vcount_in >= 180 && vcount_in <= 200) && (hcount_in >= 282 && hcount_in <= 362)) rgb_nxt <= 12'h2_2_f;
-           else if ((vcount_in >= 180 && vcount_in <= 200) && (hcount_in >= 382 && hcount_in <= 462)) rgb_nxt <= 12'h2_2_f;
-           else if ((vcount_in >= 180 && vcount_in <= 200) && (hcount_in >= 482 && hcount_in <= 562)) rgb_nxt <= 12'h2_2_f;
-           else if ((vcount_in >= 180 && vcount_in <= 200) && (hcount_in >= 582 && hcount_in <= 662)) rgb_nxt <= 12'h2_2_f;
+           if ((vcount_in >= VER3 && vcount_in <= (VER3+B_HEIGHT)) && (hcount_in >= HOR1 && hcount_in <= (HOR1+B_WIDTH))) rgb_nxt <= 12'h2_2_f;
+           else if ((vcount_in >= VER3 && vcount_in <= (VER3+B_HEIGHT)) && (hcount_in >= HOR2 && hcount_in <= (HOR2+B_WIDTH))) rgb_nxt <= 12'h2_2_f;
+           else if ((vcount_in >= VER3 && vcount_in <= (VER3+B_HEIGHT)) && (hcount_in >= HOR3 && hcount_in <= (HOR3+B_WIDTH))) rgb_nxt <= 12'h2_2_f;
+           else if ((vcount_in >= VER3 && vcount_in <= (VER3+B_HEIGHT)) && (hcount_in >= HOR4 && hcount_in <= (HOR4+B_WIDTH))) rgb_nxt <= 12'h2_2_f;
            
            //FOURTH ROW
-           if ((vcount_in >= 220 && vcount_in <= 240) && (hcount_in >= 282 && hcount_in <= 362)) rgb_nxt <= 12'h2_2_f;
-           else if ((vcount_in >= 220 && vcount_in <= 240) && (hcount_in >= 382 && hcount_in <= 462)) rgb_nxt <= 12'h2_2_f;
-           else if ((vcount_in >= 220 && vcount_in <= 240) && (hcount_in >= 482 && hcount_in <= 562)) rgb_nxt <= 12'h2_2_f;
-           else if ((vcount_in >= 220 && vcount_in <= 240) && (hcount_in >= 582 && hcount_in <= 662)) rgb_nxt <= 12'h2_2_f;
+           if ((vcount_in >= VER4 && vcount_in <= (VER4+B_HEIGHT)) && (hcount_in >= HOR1 && hcount_in <= (HOR1+B_WIDTH))) rgb_nxt <= 12'h2_2_f;
+           else if ((vcount_in >= VER4 && vcount_in <= (VER4+B_HEIGHT)) && (hcount_in >= HOR2 && hcount_in <= (HOR2+B_WIDTH))) rgb_nxt <= 12'h2_2_f;
+           else if ((vcount_in >= VER4 && vcount_in <= (VER4+B_HEIGHT)) && (hcount_in >= HOR3 && hcount_in <= (HOR3+B_WIDTH))) rgb_nxt <= 12'h2_2_f;
+           else if ((vcount_in >= VER4 && vcount_in <= (VER4+B_HEIGHT)) && (hcount_in >= HOR4 && hcount_in <= (HOR4+B_WIDTH))) rgb_nxt <= 12'h2_2_f;
                                           
            else rgb_nxt = 12'h8_8_8;
         end
