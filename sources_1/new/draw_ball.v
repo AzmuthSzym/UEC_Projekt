@@ -38,6 +38,7 @@ module draw_ball(
         output reg [10:0] hcount_out,
         output reg hsync_out,
         output reg hblnk_out,
+        output reg [11:0] x_pos_out, y_pos_out,
         output reg [11:0] rgb_out
         //output reg [11:0] xpos,ypos
     );
@@ -61,7 +62,9 @@ module draw_ball(
         vcount_out <= 0;
         hcount_out <= 0;
  
-        rgb_out <= 0;    
+        rgb_out <= 0; 
+        
+          
     end
     else
     begin
@@ -75,6 +78,9 @@ module draw_ball(
         hcount_out <= #1 hcount_in;
      
         rgb_out <= #1 rgb_nxt;
+        
+        x_pos_out <= #1 x_pos;
+        y_pos_out <= #1 y_pos; 
         
     end
     

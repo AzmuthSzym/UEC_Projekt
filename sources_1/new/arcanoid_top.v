@@ -144,19 +144,30 @@ module arcanoid_top (
     .x_pos(xpos_ctl),
     .y_pos(ypos_ctl)    
   );
-    wire [11:0] x_pos,y_pos;
+    wire [11:0] x_pos,y_pos, x_pos_out, y_pos_out;
+    wire collision;
     
   draw_ball_x my_x(
   .pclk(pclk),
-  .x_pos(x_pos)
+  .x_pos(x_pos),
+  .collision_det(collision)
   );  
     
 
 
   draw_ball_y my_y (
     .pclk(pclk),
-    .y_pos(y_pos)
+    .y_pos(y_pos),
+    .collision_det(collision)
 );
+
+  collision_detector my_detector(
+  .hcount_in(x_pos_out),
+  .vcount_in(y_pos_out),
+  .collision_det(collision),
+  .pclk(pclk)
+  
+  );
 
   draw_ball my_ball (
     .hcount_in(hcount_player),
@@ -170,6 +181,8 @@ module arcanoid_top (
     .x_pos(x_pos),
     .y_pos(y_pos),
     
+    .x_pos_out(x_pos_out),
+    .y_pos_out(y_pos_out),
     .rgb_out(rgb_out),
     .hcount_out(hcount),
     .vcount_out(vcount),
