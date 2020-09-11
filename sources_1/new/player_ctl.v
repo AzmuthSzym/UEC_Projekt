@@ -33,7 +33,7 @@ module player_ctl(
     );
     
     reg [11:0] xpos_nxt, ypos_nxt;
-    reg [11:0] xpos_hold = 600;
+    reg [11:0] xpos_hold = 824;
     always@(posedge pclk)
     if(reset)
     begin
@@ -49,7 +49,7 @@ module player_ctl(
     always@*
     begin
         xpos_nxt = mouse_xpos;       
-        ypos_nxt = 500;
+        ypos_nxt = 748;
         if(xpos_nxt >= xpos_hold)
         begin
             xpos_nxt = xpos_hold;

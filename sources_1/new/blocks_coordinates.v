@@ -21,7 +21,6 @@
 // 
 //////////////////////////////////////////////////////////////////////////////////
 
-
 // Parameters
 parameter B_WIDTH = 80;
 parameter B_HEIGHT = 20;
@@ -35,5 +34,9 @@ parameter HOR1 = 282;
 parameter HOR2 = 382;
 parameter HOR3 = 482;
 parameter HOR4 = 582;
+
+parameter P_Y = 748;
+parameter P_HEIGHT = 20;
+parameter P_WIDTH = 200;
 
 `endif // _blocks_coordinates_
