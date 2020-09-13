@@ -32,6 +32,7 @@ module draw_board
         input wire [10:0] vcount_in,
         input wire vsync_in,
         input wire vblnk_in,
+        input wire [15:0] blocks_in,
         input wire reset,
         
         output reg [10:0] vcount_out,
@@ -40,13 +41,14 @@ module draw_board
         output reg [10:0] hcount_out,
         output reg hsync_out,
         output reg hblnk_out,
+        output reg [15:0] blocks_out=0, 
         output reg [11:0] rgb_out
     );
     `include "blocks_coordinates.v"
     localparam HEIGHT = 50, WIDTH = 100;
     localparam COLOR = 12'he_f_d;
     reg [11:0] rgb_nxt = 0;
-    reg tiles [3:0] [3:0];
+
     
     always@(posedge pclk)
     if(reset)
@@ -55,6 +57,7 @@ module draw_board
         vsync_out <= 0;
  
         hblnk_out <= 0;
+        
         vblnk_out <= 0;
  
         vcount_out <= 0;
@@ -72,6 +75,8 @@ module draw_board
      
         vcount_out <= #1 vcount_in;
         hcount_out <= #1 hcount_in;
+        
+        blocks_out <= #1 blocks_in;
      
         rgb_out <= #1 rgb_nxt;
     end
@@ -80,30 +85,31 @@ module draw_board
     always @*
         begin
            //FIRST ROW
-           if ((vcount_in >= VER1 && vcount_in <= (VER1+B_HEIGHT)) && (hcount_in >= HOR1 && hcount_in <= (HOR1+B_WIDTH)) && !(tiles[0][0])) rgb_nxt <= 12'h2_2_f;
-           else if ((vcount_in >= VER1 && vcount_in <= (VER1+B_HEIGHT)) && (hcount_in >= HOR2 && hcount_in <= (HOR2+B_WIDTH))) rgb_nxt <= 12'h2_2_f;
-           else if ((vcount_in >= VER1 && vcount_in <= (VER1+B_HEIGHT)) && (hcount_in >= HOR3 && hcount_in <= (HOR3+B_WIDTH))) rgb_nxt <= 12'h2_2_f;
-           else if ((vcount_in >= VER1 && vcount_in <= (VER1+B_HEIGHT)) && (hcount_in >= HOR4 && hcount_in <= (HOR4+B_WIDTH))) rgb_nxt <= 12'h2_2_f;
+           if ((vcount_in >= VER1 && vcount_in <= (VER1+B_HEIGHT)) && (hcount_in >= HOR1 && hcount_in <= (HOR1+B_WIDTH)) && !(blocks_in & 16'b1)) rgb_nxt <= 12'h2_2_f;
+           else if ((vcount_in >= VER1 && vcount_in <= (VER1+B_HEIGHT)) && (hcount_in >= HOR2 && hcount_in <= (HOR2+B_WIDTH)) ) rgb_nxt <= 12'h2_2_f;
+           else if ((vcount_in >= VER1 && vcount_in <= (VER1+B_HEIGHT)) && (hcount_in >= HOR3 && hcount_in <= (HOR3+B_WIDTH)) ) rgb_nxt <= 12'h2_2_f;
+           else if ((vcount_in >= VER1 && vcount_in <= (VER1+B_HEIGHT)) && (hcount_in >= HOR4 && hcount_in <= (HOR4+B_WIDTH)) && !(blocks_in & 16'h8) ) rgb_nxt <= 12'h2_2_f;
            
            //SECOND ROW
-           if ((vcount_in >= VER2 && vcount_in <= (VER2+B_HEIGHT)) && (hcount_in >= HOR1 && hcount_in <= (HOR1+B_WIDTH))) rgb_nxt <= 12'h2_2_f;
-           else if ((vcount_in >= VER2 && vcount_in <= (VER2+B_HEIGHT)) && (hcount_in >= HOR2 && hcount_in <= (HOR2+B_WIDTH))) rgb_nxt <= 12'h2_2_f;
-           else if ((vcount_in >= VER2 && vcount_in <= (VER2+B_HEIGHT)) && (hcount_in >= HOR3 && hcount_in <= (HOR3+B_WIDTH))) rgb_nxt <= 12'h2_2_f;
-           else if ((vcount_in >= VER2 && vcount_in <= (VER2+B_HEIGHT)) && (hcount_in >= HOR4 && hcount_in <= (HOR4+B_WIDTH))) rgb_nxt <= 12'h2_2_f;
+           if ((vcount_in >= VER2 && vcount_in <= (VER2+B_HEIGHT)) && (hcount_in >= HOR1 && hcount_in <= (HOR1+B_WIDTH)) ) rgb_nxt <= 12'h2_2_f;
+           else if ((vcount_in >= VER2 && vcount_in <= (VER2+B_HEIGHT)) && (hcount_in >= HOR2 && hcount_in <= (HOR2+B_WIDTH)) ) rgb_nxt <= 12'h2_2_f;
+           else if ((vcount_in >= VER2 && vcount_in <= (VER2+B_HEIGHT)) && (hcount_in >= HOR3 && hcount_in <= (HOR3+B_WIDTH)) ) rgb_nxt <= 12'h2_2_f;
+           else if ((vcount_in >= VER2 && vcount_in <= (VER2+B_HEIGHT)) && (hcount_in >= HOR4 && hcount_in <= (HOR4+B_WIDTH)) && !(blocks_in & 16'h80) ) rgb_nxt <= 12'h2_2_f;
            
            //THIRD ROW
-           if ((vcount_in >= VER3 && vcount_in <= (VER3+B_HEIGHT)) && (hcount_in >= HOR1 && hcount_in <= (HOR1+B_WIDTH))) rgb_nxt <= 12'h2_2_f;
-           else if ((vcount_in >= VER3 && vcount_in <= (VER3+B_HEIGHT)) && (hcount_in >= HOR2 && hcount_in <= (HOR2+B_WIDTH))) rgb_nxt <= 12'h2_2_f;
-           else if ((vcount_in >= VER3 && vcount_in <= (VER3+B_HEIGHT)) && (hcount_in >= HOR3 && hcount_in <= (HOR3+B_WIDTH))) rgb_nxt <= 12'h2_2_f;
-           else if ((vcount_in >= VER3 && vcount_in <= (VER3+B_HEIGHT)) && (hcount_in >= HOR4 && hcount_in <= (HOR4+B_WIDTH))) rgb_nxt <= 12'h2_2_f;
+           if ((vcount_in >= VER3 && vcount_in <= (VER3+B_HEIGHT)) && (hcount_in >= HOR1 && hcount_in <= (HOR1+B_WIDTH)) ) rgb_nxt <= 12'h2_2_f;
+           else if ((vcount_in >= VER3 && vcount_in <= (VER3+B_HEIGHT)) && (hcount_in >= HOR2 && hcount_in <= (HOR2+B_WIDTH)) ) rgb_nxt <= 12'h2_2_f;
+           else if ((vcount_in >= VER3 && vcount_in <= (VER3+B_HEIGHT)) && (hcount_in >= HOR3 && hcount_in <= (HOR3+B_WIDTH)) ) rgb_nxt <= 12'h2_2_f;
+           else if ((vcount_in >= VER3 && vcount_in <= (VER3+B_HEIGHT)) && (hcount_in >= HOR4 && hcount_in <= (HOR4+B_WIDTH)) ) rgb_nxt <= 12'h2_2_f;
            
            //FOURTH ROW
-           if ((vcount_in >= VER4 && vcount_in <= (VER4+B_HEIGHT)) && (hcount_in >= HOR1 && hcount_in <= (HOR1+B_WIDTH))) rgb_nxt <= 12'h2_2_f;
-           else if ((vcount_in >= VER4 && vcount_in <= (VER4+B_HEIGHT)) && (hcount_in >= HOR2 && hcount_in <= (HOR2+B_WIDTH))) rgb_nxt <= 12'h2_2_f;
-           else if ((vcount_in >= VER4 && vcount_in <= (VER4+B_HEIGHT)) && (hcount_in >= HOR3 && hcount_in <= (HOR3+B_WIDTH))) rgb_nxt <= 12'h2_2_f;
-           else if ((vcount_in >= VER4 && vcount_in <= (VER4+B_HEIGHT)) && (hcount_in >= HOR4 && hcount_in <= (HOR4+B_WIDTH))) rgb_nxt <= 12'h2_2_f;
+           if ((vcount_in >= VER4 && vcount_in <= (VER4+B_HEIGHT)) && (hcount_in >= HOR1 && hcount_in <= (HOR1+B_WIDTH)) && !(blocks_in & 16'h1000)) rgb_nxt <= 12'h2_2_f;
+           else if ((vcount_in >= VER4 && vcount_in <= (VER4+B_HEIGHT)) && (hcount_in >= HOR2 && hcount_in <= (HOR2+B_WIDTH)) ) rgb_nxt <= 12'h2_2_f;
+           else if ((vcount_in >= VER4 && vcount_in <= (VER4+B_HEIGHT)) && (hcount_in >= HOR3 && hcount_in <= (HOR3+B_WIDTH)) ) rgb_nxt <= 12'h2_2_f;
+           else if ((vcount_in >= VER4 && vcount_in <= (VER4+B_HEIGHT)) && (hcount_in >= HOR4 && hcount_in <= (HOR4+B_WIDTH)) ) rgb_nxt <= 12'h2_2_f;
                                           
            else rgb_nxt = 12'h8_8_8;
+           
         end
     
 endmodule

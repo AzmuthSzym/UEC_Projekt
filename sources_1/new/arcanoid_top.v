@@ -90,6 +90,7 @@ module arcanoid_top (
   wire vblnk_board, hblnk_board;  
   wire [11:0] rgb_board;
   wire [11:0] xpos_ctl, ypos_ctl;
+  wire [15:0] blocks_board, blocks_det, blocks_d_out;
   
   draw_board my_board (
     .hcount_in(hcount_timing),
@@ -106,6 +107,8 @@ module arcanoid_top (
     .hsync_out(hsync_board),
     .vblnk_out(vblnk_board),
     .vsync_out(vsync_board),
+    .blocks_in(blocks_det),
+    .blocks_out(blocks_board),
     .reset(reset)
   );
      
@@ -162,13 +165,24 @@ module arcanoid_top (
 );
 
   collision_detector my_detector(
-  .hcount_in(x_pos_out),
-  .vcount_in(y_pos_out),
+  .x_pos(x_pos),
+  .y_pos(y_pos),
   .collision_det(collision),
+  .blocks_in(blocks_board),
+  .blocks_out(blocks_det),
   .pclk(pclk)
   
   );
-
+/*
+  collision_detector_1 my_1(
+    .x_pos(x_pos),
+    .y_pos(y_pos),
+    .collision_det(collision),
+    .blocks_in(blocks_d_out),
+    .blocks_out(blocks_det),
+    .pclk(pclk)
+  );*/
+    
   draw_ball my_ball (
     .hcount_in(hcount_player),
     .hsync_in(hsync_player),
@@ -214,12 +228,15 @@ module arcanoid_top (
     .blue_out(b_out)
   );  
   
+
+
   always @(posedge pclk)
   begin
     // Just pass these through.
     hs <= hsync;
     vs <= vsync;
     {r,g,b} <= {r_out,g_out,b_out};
+    
   end
   
 endmodule

@@ -30,9 +30,9 @@ module draw_ball_y(
     
     reg [11:0]  y_pos_nxt=30, y_pos_prev;
     
-    reg state= 0, state_nxt;
-    reg [31:0]  ball_time_y = 1_000_000, ball_time_y_nxt=1_000_000;
-    localparam DOWN=0, UP=1;
+    reg [1:0] state= 0, state_nxt;
+    reg [31:0]  ball_time_y = 800_000, ball_time_y_nxt=800_000;
+    localparam DOWN=0, UP=1, STOP=2'b11;
 
     
     always@(posedge pclk)
@@ -52,20 +52,24 @@ module draw_ball_y(
     always @* begin   
         
         if(ball_time_y  == 0) begin
-            ball_time_y_nxt = 1_000_000;
+            ball_time_y_nxt = 800_000;
             
             case(state)
                 DOWN: begin
-                if((y_pos +10==767) || (collision_det)) state_nxt = UP;
-                else state_nxt = state;
-                if(collision_det) y_pos_nxt = y_pos - 1;
-                else y_pos_nxt = y_pos+1;
+                if((y_pos +10==767) || (collision_det)) begin state_nxt = UP;
+                y_pos_nxt = y_pos -2; end
+                else begin state_nxt = state;
+                /*if(collision_det) y_pos_nxt = y_pos -1 ;
+                else */y_pos_nxt = y_pos+1;end
                 end
                 UP: begin
-                if((y_pos -10 == 0) || (collision_det)) state_nxt = DOWN;
-                else state_nxt = state;
-                y_pos_nxt = y_pos -1;
+                if((y_pos -10 == 0) || (collision_det)) begin state_nxt = DOWN;
+                y_pos_nxt = y_pos +2; end
+                else begin state_nxt = state;
+                /*if(collision_det) y_pos_nxt = y_pos +1  ;
+                else*/ y_pos_nxt = y_pos -1; end
                 end
+
                 default: begin
                 end
                 endcase

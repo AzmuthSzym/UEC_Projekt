@@ -33,7 +33,7 @@ reg [31:0] ball_time_x= 800_000, ball_time_x_nxt=800_000;
 reg [11:0] x_pos_nxt=220,x_pos_prev;
 //reg x_inc = 1;
 reg state, state_nxt;
-localparam DOWN=0, UP=1;
+localparam DOWN=2'b00, UP=2'b01, DOWN_CONST = 2'b10, UP_CONST = 2'b11;
 
     always@(posedge pclk) begin
         ball_time_x <= #1 ball_time_x_nxt;
@@ -55,19 +55,24 @@ localparam DOWN=0, UP=1;
                 
                 case(state)
                     DOWN: begin
-                    if((x_pos +10==1023) || (collision_det) ) state_nxt = UP;
-                    //else if(collision_det) state_nxt = UP;
-                    else state_nxt = state;
-                    if(collision_det) x_pos_nxt = x_pos - 1;
-                    else x_pos_nxt = x_pos+1;
+                    if( (x_pos +10==1023) )begin state_nxt = UP;
+                    x_pos_nxt = x_pos -2; end
+                    else if((collision_det)) begin state_nxt = UP; x_pos_nxt = x_pos -1; end
+                    else begin state_nxt = state; x_pos_nxt = x_pos+1; end
                     end
+                    
                     UP: begin
-                    if((x_pos -10 == 0) || (collision_det) ) state_nxt = DOWN;
-                    //else if(collision_det) state_nxt = DOWN ;
-                    else state_nxt = state;
-                    if(collision_det) x_pos_nxt = x_pos + 1;
-                    else x_pos_nxt = x_pos -1;
+                    if((x_pos -10 == 0) /*|| (collision_det)*/ )begin  state_nxt = DOWN; x_pos_nxt =x_pos +2; end
+                    else if(collision_det) begin state_nxt = DOWN; x_pos_nxt = x_pos+1; end
+                    else begin state_nxt = state;
+                     x_pos_nxt = x_pos -1;
                     end
+                    end
+                    
+                    /*DOWN_CONST: begin x_pos_nxt = x_pos; state_nxt = state; end
+                
+                    UP_CONST: begin x_pos_nxt = x_pos ; state_nxt = state; end*/
+                    
                     default: begin
                     end
                     
