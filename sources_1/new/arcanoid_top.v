@@ -161,7 +161,10 @@ module arcanoid_top (
   draw_ball_y my_y (
     .pclk(pclk),
     .y_pos(y_pos),
-    .collision_det(collision)
+    .collision_det(collision),
+    .mouse_y_pos(ypos_ctl),
+    .mouse_x_pos(xpos_ctl),
+    .x_pos(x_pos)
 );
 
   collision_detector my_detector(

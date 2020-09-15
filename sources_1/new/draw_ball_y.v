@@ -24,6 +24,7 @@ module draw_ball_y(
         input wire pclk,
         input wire reset,
         input wire collision_det,
+        input wire [11:0] mouse_y_pos, mouse_x_pos, x_pos,
 
         output reg [11:0] y_pos
     );
@@ -56,7 +57,7 @@ module draw_ball_y(
             
             case(state)
                 DOWN: begin
-                if((y_pos +10==767) || (collision_det)) begin state_nxt = UP;
+                if((y_pos +10==767) || (collision_det) ||  (( y_pos + 10 >= mouse_y_pos ) && (x_pos >=mouse_x_pos && x_pos <= mouse_x_pos + 200)   ) ) begin state_nxt = UP;
                 y_pos_nxt = y_pos -2; end
                 else begin state_nxt = state;
                 /*if(collision_det) y_pos_nxt = y_pos -1 ;
