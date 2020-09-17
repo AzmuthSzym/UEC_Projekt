@@ -3,9 +3,9 @@
 // Company: 
 // Engineer: 
 // 
-// Create Date: 10.09.2020 14:08:37
+// Create Date: 10.03.2020 14:08:37
 // Design Name: 
-// Module Name: start_screen
+// Module Name: draw_backgorund
 // Project Name: 
 // Target Devices: 
 // Tool Versions: 
@@ -20,7 +20,7 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 
-module start_screen
+module draw_background
     (
         output reg [10:0] vcount_out,
         output reg vsync_out,
@@ -41,7 +41,9 @@ module start_screen
     );
     
     reg [11:0] rgb_nxt = 0;
-     
+    reg screen_state = 0;
+    reg time_to_wait = 0;
+    
     always @(posedge pclk)
     if(reset)
     begin
@@ -67,24 +69,55 @@ module start_screen
            
     always @*
       begin
-      
+        if(screen_state == 0)
+        begin
           //TRZY
           if ((vcount_in >= 150 && vcount_in <= 200) && (hcount_in >= 300 && hcount_in <= 400)) rgb_nxt <= 12'h2_2_f;
           else if ((vcount_in >= 200 && vcount_in <= 250) && (hcount_in >= 350 && hcount_in <= 400)) rgb_nxt <= 12'h2_2_f;
           else if ((vcount_in >= 250 && vcount_in <= 300) && (hcount_in >= 320 && hcount_in <= 400)) rgb_nxt <= 12'h2_2_f;
           else if ((vcount_in >= 300 && vcount_in <= 350) && (hcount_in >= 350 && hcount_in <= 400)) rgb_nxt <= 12'h2_2_f;
           else if ((vcount_in >= 350 && vcount_in <= 400) && (hcount_in >= 300 && hcount_in <= 400)) rgb_nxt <= 12'h2_2_f;
+          screen_state = 1;
+        end
           
-          /*DWA
-          if ((vcount_in >= 150 && vcount_in <= 200) && (hcount_in >= 300 && hcount_in <= 400)) rgb_nxt <= 12'h2_2_f;
-          else if ((vcount_in >= 200 && vcount_in <= 250) && (hcount_in >= 350 && hcount_in <= 400)) rgb_nxt <= 12'h2_2_f;
-          else if ((vcount_in >= 250 && vcount_in <= 300) && (hcount_in >= 300 && hcount_in <= 400)) rgb_nxt <= 12'h2_2_f;
-          else if ((vcount_in >= 300 && vcount_in <= 350) && (hcount_in >= 300 && hcount_in <= 350)) rgb_nxt <= 12'h2_2_f;
-          else if ((vcount_in >= 350 && vcount_in <= 400) && (hcount_in >= 300 && hcount_in <= 400)) rgb_nxt <= 12'h2_2_f;*/
+        else if(screen_state == 1)
+        begin
+          time_to_wait = time_to_wait + 1;
+          if(time_to_wait == 10000)
+            begin
+              time_to_wait = 0;
+              screen_state = 2;
+            end
+        end
           
-          /*JEDEN
-          if ((vcount_in >= 150 && vcount_in <= 200) && (hcount_in >= 300 && hcount_in <= 400)) rgb_nxt <= 12'h2_2_f;
-          else if ((vcount_in >= 200 && vcount_in <= 400) && (hcount_in >= 350 && hcount_in <= 400)) rgb_nxt <= 12'h2_2_f;*/
+          else if(screen_state == 2)
+          begin
+            //DWA
+            if ((vcount_in >= 150 && vcount_in <= 200) && (hcount_in >= 300 && hcount_in <= 400)) rgb_nxt <= 12'h2_2_f;
+            else if ((vcount_in >= 200 && vcount_in <= 250) && (hcount_in >= 350 && hcount_in <= 400)) rgb_nxt <= 12'h2_2_f;
+            else if ((vcount_in >= 250 && vcount_in <= 300) && (hcount_in >= 300 && hcount_in <= 400)) rgb_nxt <= 12'h2_2_f;
+            else if ((vcount_in >= 300 && vcount_in <= 350) && (hcount_in >= 300 && hcount_in <= 350)) rgb_nxt <= 12'h2_2_f;
+            else if ((vcount_in >= 350 && vcount_in <= 400) && (hcount_in >= 300 && hcount_in <= 400)) rgb_nxt <= 12'h2_2_f;
+            screen_state = 3;
+          end
+          
+          else if(screen_state == 3)
+          begin
+            time_to_wait = time_to_wait + 1;
+            if(time_to_wait == 10000)
+              begin
+                time_to_wait = 0;
+                screen_state = 4;
+              end
+          end     
+          
+          else if(screen_state == 4)
+          begin               
+            //JEDEN
+            if ((vcount_in >= 150 && vcount_in <= 200) && (hcount_in >= 300 && hcount_in <= 400)) rgb_nxt <= 12'h2_2_f;
+            else if ((vcount_in >= 200 && vcount_in <= 400) && (hcount_in >= 350 && hcount_in <= 400)) rgb_nxt <= 12'h2_2_f;
+          end
+          
           else rgb_nxt = 12'h8_8_8;
           
       end
