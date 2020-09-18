@@ -23,7 +23,7 @@
 module draw_ball_x(
         input wire pclk,
         input wire reset,
-        input wire collision_det,
+        input wire [15:0] collision_det,
 
         output reg [11:0] x_pos
     );
@@ -74,6 +74,8 @@ localparam DOWN=2'b00, UP=2'b01, DOWN_CONST = 2'b10, UP_CONST = 2'b11;
                     UP_CONST: begin x_pos_nxt = x_pos ; state_nxt = state; end*/
                     
                     default: begin
+                    x_pos_nxt = x_pos;
+                    state_nxt = state;
                     end
                     
                     endcase

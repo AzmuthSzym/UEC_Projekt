@@ -23,7 +23,7 @@
 module draw_ball_y(
         input wire pclk,
         input wire reset,
-        input wire collision_det,
+        input wire [15:0] collision_det,
         input wire [11:0] mouse_y_pos, mouse_x_pos, x_pos,
 
         output reg [11:0] y_pos
@@ -72,6 +72,8 @@ module draw_ball_y(
                 end
 
                 default: begin
+                y_pos_nxt = y_pos;
+                state_nxt = state;
                 end
                 endcase
 

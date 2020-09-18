@@ -59,12 +59,15 @@ module arcanoid_top (
   wire mouse_left; 
   wire [11:0] rgb_wire, rgb_out;
   wire [11:0] xpos, ypos;
+  wire [11:0] xpos_buffer, ypos_buffer;
+  wire reset_buff;
 
+  wire ps2_mousedata, ps2_mouseclk;
   MouseCtl my_mouse (
      .clk(mclk),
-     .rst(reset),
-     .ps2_clk(ps2_clk),
-     .ps2_data(ps2_data),
+     .rst(reset_buff),
+     .ps2_clk(ps2_mouseclk),
+     .ps2_data(ps2_mousedata),
      .ypos(ypos),
      .xpos(xpos),
      .left(mouse_left)
@@ -108,7 +111,7 @@ module arcanoid_top (
     .vblnk_out(vblnk_board),
     .vsync_out(vsync_board),
     .blocks_in(blocks_det),
-    .blocks_out(blocks_board),
+    //.blocks_out(blocks_board),
     .reset(reset)
   );
      
@@ -171,7 +174,7 @@ module arcanoid_top (
   .x_pos(x_pos),
   .y_pos(y_pos),
   .collision_det(collision),
-  .blocks_in(blocks_board),
+//  .blocks_in(blocks_board),
   .blocks_out(blocks_det),
   .pclk(pclk)
   
@@ -217,9 +220,9 @@ module arcanoid_top (
   wire [3:0] r_out, g_out, b_out;
   
   MouseDisplay my_display (
-    .pixel_clk(mclk),
-    .xpos(xpos),
-    .ypos(ypos),
+    .pixel_clk(pclk),
+    .xpos(xpos_buffer),
+    .ypos(ypos_buffer),
     .hcount(hcount),
     .vcount(vcount),
     .blank(hblnk|vblnk),
@@ -231,6 +234,36 @@ module arcanoid_top (
     .blue_out(b_out)
   );  
   
+  CrossClockBuffer my_buffer_ps2data(
+  .clk(pclk),
+  .inout_data_in(ps2_mousedata),
+  .inout_data_out(ps2_data)
+  );
+  
+  CrossClockBuffer my_buffer_ps2clock(
+  .clk(pclk),
+  .inout_data_in(ps2_mouseclk),
+  .inout_data_out(ps2_clk)
+  );
+  
+  
+  CrossClockBuffer my_buffer_mousexpos(
+  .clk(pclk),
+  .data_in(xpos),
+  .data_out(xpos_buffer)
+  );
+  
+  CrossClockBuffer my_buffer_mouseypos(
+  .clk(pclk),
+  .data_in(ypos),
+  .data_out(ypos_buffer)
+  );
+  
+  CrossClockBuffer my_buffer_reset(
+  .clk(pclk),
+  .data_in(reset),
+  .data_out(reset_buff)
+  );
 
 
   always @(posedge pclk)
