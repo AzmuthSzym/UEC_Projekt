@@ -32,9 +32,8 @@ module collision_detector(
     
     `include "blocks_coordinates.v"
     
-    reg collision_det_nxt,x_pos_hold_nxt=0;
+    reg collision_det_nxt;
     reg [15:0] blocks_nxt=0, blocks=0,blocks_det=0;
-    reg [11:0] x_pos_hold=0;
     reg [1:0] tile_1=2,tile_2=1,tile_3=2, tile_4 =2,
               tile_5=2,tile_6=2, tile_7=2, tile_8 = 2,
               tile_9=2, tile_10=2, tile_11=2,tile_12=2,
@@ -196,6 +195,8 @@ collision_detector_12 my_collision_12(
     tile_2 <= tile_2_nxt;
     tile_3 <= tile_3_nxt;
     
+    tile_8 <= tile_8_nxt;
+    
     
     end
     
@@ -242,10 +243,10 @@ collision_detector_12 my_collision_12(
                                tile_6_nxt=2; tile_7_nxt=2; tile_8_nxt=2; tile_9_nxt=2; tile_10_nxt=2; 
                                tile_11_nxt=2; tile_12_nxt=2;  tile_13_nxt=2; tile_14_nxt=2; tile_15_nxt=2; tile_16_nxt=2; end
                else  begin 
-                    if( (x_pos_hold )  ) begin
+                    /*if( (x_pos_hold )  ) begin
                     collision_det_nxt = 1;
                     x_pos_hold = x_pos_hold -1; end
-                    else
+                    else*/
                     
                     collision_det_nxt = 0;
 
