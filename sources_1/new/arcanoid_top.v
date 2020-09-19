@@ -1,12 +1,11 @@
 `timescale 1 ns / 1 ps
-
 //////////////////////////////////////////////////////////////////////////////////
 // Company: AGH
 // Engineer: Szymon Dziadon / Pawel Majtas
 // 
 // Create Date: 17.08.2020 14:08:37
 // Design Name: 
-// Module Name: arcanoid_timing
+// Module Name: arcanoid_top
 // Project Name: Arkanoid
 // Target Devices: 
 // Tool Versions: 
@@ -66,13 +65,13 @@ module arcanoid_top (
 
   wire ps2_mousedata, ps2_mouseclk;
   MouseCtl my_mouse (
-     .clk(mclk),
-     .rst(reset),
-     .ps2_clk(ps2_clk),
-     .ps2_data(ps2_data),
-     .ypos(ypos),
-     .xpos(xpos),
-     .left(mouse_left)
+    .clk(mclk),
+    .rst(reset),
+    .ps2_clk(ps2_clk),
+    .ps2_data(ps2_data),
+    .ypos(ypos),
+    .xpos(xpos),
+    .left(mouse_left)
   );
 
   wire [10:0] vcount_timing, hcount_timing;
@@ -112,19 +111,18 @@ module arcanoid_top (
     .hsync_out(hsync_board),
     .vblnk_out(vblnk_board),
     .vsync_out(vsync_board),
-    .blocks_in(blocks_det),
-    //.blocks_out(blocks_board),
+	.blocks_in(blocks_det),
     .reset(reset_buff)
   );
      
    player_ctl my_player_ctl(
-   .mouse_left(mouse_left),
-   .mouse_xpos(xpos_buffer),
-   .mouse_ypos(ypos_buffer),
-   .xpos(xpos_ctl),
-   .ypos(ypos_ctl),
-   .pclk(pclk),
-   .reset(reset_buff)
+	.mouse_left(mouse_left),
+    .mouse_xpos(xpos_buffer),
+    .mouse_ypos(ypos_buffer),
+    .xpos(xpos_ctl),
+    .ypos(ypos_ctl),
+    .pclk(pclk),
+    .reset(reset_buff)
   );
    
   wire [10:0] vcount_player, hcount_player;
@@ -156,15 +154,17 @@ module arcanoid_top (
     wire collision;
     
   draw_ball_x my_x(
-  .pclk(pclk),
-  .x_pos(x_pos),
-  .collision_det(collision)
+	.pclk(pclk),
+	.x_pos(x_pos),
+	.reset(reset_buff),
+	.collision_det(collision)
   );  
     
 
 
   draw_ball_y my_y (
     .pclk(pclk),
+    .reset(reset_buff),
     .y_pos(y_pos),
     .collision_det(collision),
     .mouse_y_pos(ypos_ctl),
@@ -173,23 +173,14 @@ module arcanoid_top (
 );
 
   collision_detector my_detector(
-  .x_pos(x_pos),
-  .y_pos(y_pos),
-  .collision_det(collision),
-//  .blocks_in(blocks_board),
-  .blocks_out(blocks_det),
-  .pclk(pclk)
+	.x_pos(x_pos),
+	.y_pos(y_pos),
+	.reset(reset_buff),
+	.collision_det(collision),
+	.blocks_out(blocks_det),
+	.pclk(pclk)
   
   );
-/*
-  collision_detector_1 my_1(
-    .x_pos(x_pos),
-    .y_pos(y_pos),
-    .collision_det(collision),
-    .blocks_in(blocks_d_out),
-    .blocks_out(blocks_det),
-    .pclk(pclk)
-  );*/
     
   draw_ball my_ball (
     .hcount_in(hcount_player),
@@ -235,19 +226,6 @@ module arcanoid_top (
     .green_out(g_out),
     .blue_out(b_out)
   );  
-  /*
-  CrossClockBuffer my_buffer_ps2data(
-  .clk(pclk),
-  .inout_data_in(ps2_mousedata),
-  .inout_data_out(ps2_data)
-  );
-  
-  CrossClockBuffer my_buffer_ps2clock(
-  .clk(pclk),
-  .inout_data_in(ps2_mouseclk),
-  .inout_data_out(ps2_clk)
-  );
-  */
   
   CrossClockBuffer my_buffer_mousexpos(
   .clk(pclk),
@@ -272,17 +250,9 @@ module arcanoid_top (
   .data_in(reset),
   .data_out(reset_m)
   );
-  /*
-  CrossClockBuffer my_buffer_pclkmirror(
-  .clk(pclk),
-  .data_in(pclk_mirror_buff),
-  .data_out(pclk_mirror)
-  );
-*/
 
   always @(posedge pclk)
   begin
-    // Just pass these through.
     hs <= hsync;
     vs <= vsync;
     {r,g,b} <= {r_out,g_out,b_out};

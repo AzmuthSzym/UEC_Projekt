@@ -1,8 +1,7 @@
 `ifndef _blocks_coordinates_
 `define _blocks_coordinates_
-
 //////////////////////////////////////////////////////////////////////////////////
-// Company:  AGH
+// Company: AGH
 // Engineer: Szymon Dziadon / Pawel Majtas
 // 
 // Create Date: 02.09.2020 23:06:45
@@ -11,7 +10,7 @@
 // Project Name: Arkanoid
 // Target Devices: 
 // Tool Versions: 
-// Description: 
+// Description: Projekt Układy Elektroniki Cyfrowej
 // 
 // Dependencies: 
 // 

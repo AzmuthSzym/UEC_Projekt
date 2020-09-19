@@ -1,15 +1,15 @@
 `timescale 1ns / 1ps
 //////////////////////////////////////////////////////////////////////////////////
-// Company: 
-// Engineer: 
+// Company: AGH
+// Engineer: Szymon Dziadon / Pawel Majtas 
 // 
 // Create Date: 18.09.2020 23:59:14
 // Design Name: 
 // Module Name: Fast2SlowClock
-// Project Name: 
+// Project Name: Arkanoid
 // Target Devices: 
 // Tool Versions: 
-// Description: 
+// Description: Projekt Układy Elektroniki Cyfrowej
 // 
 // Dependencies: 
 // 
@@ -18,7 +18,6 @@
 // Additional Comments:
 // 
 //////////////////////////////////////////////////////////////////////////////////
-
 
 module CrossClockBuffer(
 

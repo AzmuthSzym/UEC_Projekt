@@ -1,12 +1,11 @@
 `timescale 1ns / 1ps
-
 //////////////////////////////////////////////////////////////////////////////////
 // Company: AGH
 // Engineer: Szymon Dziadon / Pawel Majtas
 // 
 // Create Date: 19.08.2020 14:18:56
 // Design Name: 
-// Module Name: arcanoid_timing
+// Module Name: draw_player
 // Project Name: Arkanoid
 // Target Devices: 
 // Tool Versions: 
@@ -19,7 +18,6 @@
 // Additional Comments:
 // 
 //////////////////////////////////////////////////////////////////////////////////
-
 
 module draw_player(
         input wire reset,

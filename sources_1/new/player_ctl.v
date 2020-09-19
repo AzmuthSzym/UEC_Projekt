@@ -1,12 +1,11 @@
 `timescale 1ns / 1ps
-
 //////////////////////////////////////////////////////////////////////////////////
 // Company: AGH
 // Engineer: Szymon Dziadon / Pawel Majtas
 // 
 // Create Date: 19.08.2020 20:10:37
 // Design Name: 
-// Module Name: arcanoid_timing
+// Module Name: player_ctl
 // Project Name: Arkanoid
 // Target Devices: 
 // Tool Versions: 
@@ -19,7 +18,6 @@
 // Additional Comments:
 // 
 //////////////////////////////////////////////////////////////////////////////////
-
 
 module player_ctl(
         input wire [11:0] mouse_xpos,
