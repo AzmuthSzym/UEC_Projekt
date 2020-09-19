@@ -25,14 +25,14 @@ module CrossClockBuffer(
     input clk,
     input mclk,
     
-    input wire data_in,
-    output wire data_out,
+    input wire[11:0] data_in,
+    output wire [11:0] data_out,
     
     inout wire inout_data_in,
     inout wire inout_data_out
     );
     
-    reg data_in_hold,inout_data_in_hold;
+    reg [11:0] data_in_hold,inout_data_in_hold;
     
     always@(posedge clk) begin 
     
