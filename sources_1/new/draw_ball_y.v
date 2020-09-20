@@ -28,7 +28,7 @@ module draw_ball_y(
         output reg [11:0] y_pos
     );
     
-    reg [11:0]  y_pos_nxt=400, y_pos_prev;
+    reg [11:0]  y_pos_nxt=250, y_pos_prev;
     
     reg [1:0] state= 0, state_nxt;
     reg [31:0]  ball_time_y = 800_000, ball_time_y_nxt=800_000;
@@ -38,7 +38,7 @@ module draw_ball_y(
     always@(posedge pclk)
     if(reset)
     begin
-        y_pos <= #1 400;
+        y_pos <= #1 250;
         ball_time_y <= #1 0;
         state <= #1 0;
     end
