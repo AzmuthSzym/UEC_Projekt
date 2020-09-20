@@ -42,7 +42,7 @@ module draw_board
         output reg [15:0] blocks_out=0, 
         output reg [11:0] rgb_out
     );
-    `include "blocks_coordinates.v"
+    `include "parameters.v"
     localparam HEIGHT = 50, WIDTH = 100;
     localparam COLOR = 12'he_f_d;
     reg [11:0] rgb_nxt = 0;

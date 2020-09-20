@@ -30,7 +30,7 @@ module collision_detector(
     output reg [15:0] collision_det
     );
     
-    `include "blocks_coordinates.v"
+    `include "parameters.v"
     
     reg collision_det_nxt;
     reg [15:0] blocks_nxt=0, blocks=0,blocks_det=0;
